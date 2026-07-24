@@ -31,11 +31,54 @@ const Quiz = (() => {
   }
 
   /* =====================================================================
-     Beginnen, bewaren, herstellen
+     Volgorde van de gezichten in de strip
      ===================================================================== */
 
+  function husselen(rij) {
+    for (let i = rij.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [rij[i], rij[j]] = [rij[j], rij[i]];
+    }
+    return rij;
+  }
+
+  /**
+   * Zet de gezichten in willekeurige volgorde én houdt gezichten uit dezelfde
+   * foto uit elkaar.
+   *
+   * Zonder dit staan de mensen van één kiekje netjes naast elkaar, en dat
+   * verklapt dat ze bij elkaar horen — een echtpaar, of broers en zussen.
+   * Alleen husselen is niet genoeg: dan belanden ze soms alsnog naast elkaar.
+   * Daarom pakken we steeds uit de foto met de meeste gezichten over, maar
+   * nooit twee keer achter elkaar uit dezelfde. Zo staan ze gegarandeerd
+   * verspreid, zolang geen enkele foto meer dan de helft levert.
+   */
+  function doorElkaar(ids) {
+    const perFoto = new Map();
+    for (const id of husselen([...ids])) {
+      const gezicht = Data.gezicht(id);
+      const sleutel = gezicht ? gezicht.fotoId : "?";
+      if (!perFoto.has(sleutel)) perFoto.set(sleutel, []);
+      perFoto.get(sleutel).push(id);
+    }
+
+    const uit = [];
+    let vorige = null;
+    while (uit.length < ids.length) {
+      // Husselen vóór het sorteren, zodat foto's met evenveel gezichten over
+      // elkaar niet altijd in dezelfde volgorde aan de beurt komen.
+      const over = husselen([...perFoto.entries()].filter(([, v]) => v.length));
+      if (!over.length) break;
+      over.sort((a, b) => b[1].length - a[1].length);
+      const keuze = over.find(([k]) => k !== vorige) || over[0];
+      uit.push(keuze[1].pop());
+      vorige = keuze[0];
+    }
+    return uit;
+  }
+
   function begin(gezichtIds = null) {
-    inSpel = gezichtIds || Data.gezichten.map((g) => g.id);
+    inSpel = doorElkaar(gezichtIds || Data.gezichten.map((g) => g.id));
     plaatsingen = new Map();
     actiefGezicht = null;
     actievePersoon = null;
@@ -44,6 +87,10 @@ const Quiz = (() => {
     bewaar();
     naarInvullen();
   }
+
+  /* =====================================================================
+     Beginnen, bewaren, herstellen
+     ===================================================================== */
 
   function bewaar() {
     try {
