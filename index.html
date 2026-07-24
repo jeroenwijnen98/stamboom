@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#f4efe6" />
+    <title>Stamboomquiz</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <!-- ================= Slot ================= -->
+    <section class="scherm scherm-midden actief" id="scherm-slot">
+      <form class="slot-kaart" id="slot-formulier" autocomplete="off">
+        <h1 id="slot-titel">Stamboomquiz</h1>
+        <p class="slot-ondertitel" id="slot-ondertitel"></p>
+        <p class="slot-uitleg" id="slot-uitleg"></p>
+        <input class="slot-veld" type="password" id="slot-code" autocomplete="off"
+               autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <button class="knop" type="submit" id="slot-knop"></button>
+        <p class="slot-melding" id="slot-melding"></p>
+      </form>
+    </section>
+
+    <!-- ================= Moduskeuze ================= -->
+    <section class="scherm scherm-midden" id="scherm-keuze">
+      <div class="keuze">
+        <h2 id="keuze-kop"></h2>
+        <button class="keuze-kaart" id="kies-quiz">
+          <strong id="kies-quiz-titel"></strong>
+          <span id="kies-quiz-uitleg"></span>
+        </button>
+        <button class="keuze-kaart" id="kies-bladeren">
+          <strong id="kies-bladeren-titel"></strong>
+          <span id="kies-bladeren-uitleg"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= Spel / bladeren / uitslag-in-de-boom ============ -->
+    <section class="scherm" id="scherm-spel">
+      <div class="balk">
+        <button class="icoonknop" id="knop-terug" title="Terug">←</button>
+        <span class="balk-titel" id="spel-titel"></span>
+        <button class="icoonknop" id="knop-opnieuw" title="Opnieuw beginnen">↺</button>
+      </div>
+
+      <div class="strip" id="strip"></div>
+
+      <div id="boom"></div>
+
+      <p class="aanwijzing" id="aanwijzing"></p>
+
+      <div class="voet">
+        <div class="voortgang"><div class="voortgang-vulling" id="voortgang"></div></div>
+        <span class="voortgang-tekst" id="voortgang-tekst"></span>
+        <button class="knop knop-klein" id="knop-nakijken" disabled></button>
+        <button class="knop knop-klein knop-stil" id="knop-terug-lijst" hidden></button>
+      </div>
+    </section>
+
+    <!-- ================= Uitslag ================= -->
+    <section class="scherm" id="scherm-uitslag">
+      <div class="uitslag-rol">
+        <div class="uitslag-binnen">
+          <div class="score">
+            <div class="score-groot" id="score-groot"></div>
+            <div class="score-onder" id="score-onder"></div>
+            <div class="score-tijd" id="score-tijd"></div>
+          </div>
+
+          <button class="knop knop-stil" id="knop-in-boom" style="width:100%"></button>
+
+          <details class="uitslag-groep" id="groep-fout" open>
+            <summary><span class="stip fout"></span><span id="kop-fout"></span></summary>
+            <div id="lijst-fout"></div>
+          </details>
+
+          <details class="uitslag-groep" id="groep-goed">
+            <summary><span class="stip goed"></span><span id="kop-goed"></span></summary>
+            <div id="lijst-goed"></div>
+          </details>
+
+          <div class="uitslag-knoppen">
+            <button class="knop" id="knop-opnieuw-alles"></button>
+            <button class="knop knop-stil" id="knop-alleen-fout"></button>
+            <button class="knop knop-stil" id="knop-naar-bladeren"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Fotocontext ================= -->
+    <div class="overlay" id="overlay-foto">
+      <div class="overlay-balk">
+        <button class="icoonknop" id="foto-sluit" title="Sluiten">✕</button>
+        <span class="overlay-titel">
+          <span id="foto-titel"></span>
+          <span class="overlay-onder" id="foto-onder"></span>
+        </span>
+      </div>
+      <div class="foto-houder">
+        <div class="foto-frame" id="foto-frame">
+          <img id="overlay-afbeelding" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Bladerpaneel ================= -->
+    <div class="blad" id="blad">
+      <div class="blad-greep"></div>
+      <div class="blad-kop">
+        <h3 id="blad-naam"></h3>
+        <p id="blad-onder"></p>
+      </div>
+      <div class="blad-rol" id="blad-rol"></div>
+    </div>
+
+    <!-- ================= Dialoog ================= -->
+    <div class="dialoog" id="dialoog">
+      <div class="dialoog-kaart">
+        <h3 id="dialoog-kop"></h3>
+        <p id="dialoog-tekst"></p>
+        <div class="dialoog-knoppen">
+          <button class="knop knop-stil" id="dialoog-nee"></button>
+          <button class="knop" id="dialoog-ja"></button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/crypto.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/stamboom-layout.js"></script>
+    <script src="js/gezicht.js"></script>
+    <script src="js/boom-view.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/quiz.js"></script>
+    <script src="js/bladeren.js"></script>
+    <script src="js/start.js"></script>
+  </body>
+</html>

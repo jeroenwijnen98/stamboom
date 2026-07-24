@@ -1,0 +1,682 @@
+/* =========================================================================
+   BEHEER-TOOL — opmaak
+
+   Bouwt voort op css/styles.css. Deze pagina draait lokaal op een laptop,
+   dus hier mag het gerust een werkbank zijn in plaats van een album.
+   ========================================================================= */
+
+body.beheer {
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100dvh;
+}
+
+.beheer-kop {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: var(--kaart);
+  border-bottom: 1px solid var(--lijn);
+  flex-wrap: wrap;
+}
+
+.beheer-kop h1 {
+  font-size: 1.05rem;
+  margin-right: 4px;
+}
+
+.beheer-status {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--inkt-zacht);
+  min-height: 18px;
+}
+
+.beheer-status.gelukt {
+  color: var(--goed);
+}
+.beheer-status.mis {
+  color: var(--fout);
+}
+
+/* ---------- Tabs ---------- */
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--papier-diep);
+  padding: 3px;
+  border-radius: 999px;
+}
+
+.tab {
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 0;
+  background: transparent;
+  color: var(--inkt-zacht);
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.tab.actief {
+  background: var(--kaart);
+  color: var(--inkt);
+  box-shadow: 0 1px 3px rgba(60, 45, 30, 0.14);
+}
+
+/* ---------- Panelen ---------- */
+
+.paneel {
+  display: none;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.paneel.actief {
+  display: grid;
+}
+
+#tab-gezichten.actief {
+  grid-template-rows: auto auto 1fr;
+}
+
+#tab-publiceren.actief {
+  grid-template-rows: 1fr;
+}
+
+.werkbalk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--lijn);
+  background: var(--papier);
+  flex-wrap: wrap;
+}
+
+.werkbalk-info {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--inkt-zacht);
+}
+
+.werkvlak {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.werkvlak-boom,
+.werkvlak-foto {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.werkvlak-foto {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: var(--papier-diep);
+  overflow: auto;
+}
+
+.werkvlak-foto.sleep-over {
+  outline: 3px dashed var(--accent);
+  outline-offset: -8px;
+}
+
+.werkvlak-leeg {
+  color: var(--inkt-zacht);
+  text-align: center;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  max-width: 420px;
+}
+
+/* ---------- Zijpaneel ---------- */
+
+.zijpaneel {
+  border-left: 1px solid var(--lijn);
+  background: var(--kaart);
+  padding: 16px;
+  overflow-y: auto;
+  font-size: 0.9rem;
+}
+
+.zijpaneel h3 {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--inkt-zacht);
+  font-family: var(--sans);
+  margin: 22px 0 8px;
+}
+
+.zijpaneel h3:first-child {
+  margin-top: 0;
+}
+
+.zijpaneel-leeg {
+  color: var(--inkt-zacht);
+  line-height: 1.55;
+}
+
+.zijpaneel label,
+.kaart label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--inkt-zacht);
+}
+
+.zijpaneel input[type="text"],
+.zijpaneel input[type="number"],
+.zijpaneel input[type="search"],
+.kaart input,
+.dialoog-kaart textarea {
+  font: inherit;
+  font-weight: 400;
+  color: var(--inkt);
+  width: 100%;
+  margin-top: 4px;
+  padding: 9px 11px;
+  border: 1.5px solid var(--lijn);
+  border-radius: 8px;
+  background: var(--papier);
+}
+
+.zijpaneel input:focus,
+.kaart input:focus,
+.dialoog-kaart textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.veld-rij {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.knoppenrij {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.knoppenrij .knop {
+  flex: 1 1 auto;
+}
+
+.hint {
+  font-weight: 400;
+  color: var(--inkt-zacht);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.vinkje {
+  display: flex !important;
+  gap: 8px;
+  align-items: flex-start;
+  font-weight: 400 !important;
+  cursor: pointer;
+  margin-top: 14px !important;
+}
+
+.vinkje input {
+  margin-top: 2px;
+  flex: none;
+}
+
+.knop-gevaar {
+  background: transparent;
+  color: var(--fout);
+  border: 1.5px solid var(--fout-zacht);
+  box-shadow: none;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.knop-gevaar:hover:not(:disabled) {
+  background: var(--fout);
+  color: #fff;
+  border-color: var(--fout);
+}
+
+/* ---------- Koppelen aan een bestaande persoon ---------- */
+
+.koppel {
+  background: var(--papier);
+  border: 1.5px solid var(--accent-zacht);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.koppel-kop {
+  margin: 0 0 10px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.koppel .knop {
+  width: 100%;
+}
+
+.koppel input[type="search"] {
+  margin: 10px 0 0;
+}
+
+.koppel .naamlijst {
+  max-height: 200px;
+  background: var(--kaart);
+}
+
+.naamknop:disabled {
+  color: var(--inkt-zacht);
+  cursor: default;
+  opacity: 0.6;
+}
+
+.naamknop:disabled:hover {
+  background: transparent;
+}
+
+/* ---------- Relatielijst ---------- */
+
+.relatielijst {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.relatie {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--papier);
+  border-radius: 7px;
+  font-size: 0.82rem;
+}
+
+.relatie-rol {
+  color: var(--inkt-zacht);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex: none;
+  width: 58px;
+}
+
+.relatie-naam {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.relatie-weg {
+  border: 0;
+  background: transparent;
+  color: var(--inkt-zacht);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 5px;
+  flex: none;
+}
+
+.relatie-weg:hover {
+  background: var(--fout-zacht);
+  color: var(--fout);
+}
+
+/* ---------- Fotostrook ---------- */
+
+.fotostrook {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  overflow-x: auto;
+  background: var(--papier);
+  border-bottom: 1px solid var(--lijn);
+  min-height: 74px;
+  align-items: center;
+}
+
+.duim {
+  flex: none;
+  width: 54px;
+  height: 54px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--lijn);
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  box-shadow: var(--schaduw);
+}
+
+.duim.actief {
+  border-color: var(--accent);
+}
+
+.duim-teller {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--olijf);
+  color: #fff;
+  font-size: 0.66rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.duim-teller.geen {
+  background: var(--inkt-zacht);
+}
+
+/* ---------- Foto met cirkels ---------- */
+
+.foto-doek {
+  position: relative;
+  line-height: 0;
+  touch-action: none;
+  cursor: crosshair;
+  box-shadow: var(--schaduw-diep);
+  background: #fff;
+}
+
+.foto-doek img {
+  max-width: 100%;
+  max-height: calc(100dvh - 260px);
+  display: block;
+  user-select: none;
+}
+
+.cirkels {
+  position: absolute;
+  inset: 0;
+}
+
+.cirkel {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+  cursor: move;
+}
+
+.cirkel.actief {
+  border-color: var(--accent);
+  border-width: 3px;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.4), 0 0 18px rgba(181, 87, 58, 0.65);
+}
+
+.cirkel.naamloos {
+  border-style: dashed;
+  border-color: #ffd6a0;
+}
+
+.cirkel-naam {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 5px);
+  background: rgba(20, 16, 12, 0.85);
+  color: #fff;
+  font-size: 0.68rem;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.cirkel-greep {
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #fff;
+  cursor: ew-resize;
+}
+
+/* ---------- Naamlijst (wie is dit?) ---------- */
+
+.naamlijst {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 6px 0;
+  border: 1px solid var(--lijn);
+  border-radius: 8px;
+  padding: 4px;
+  background: var(--papier);
+}
+
+.naamknop {
+  font: inherit;
+  font-size: 0.85rem;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 7px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--inkt);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.naamknop:hover {
+  background: var(--accent-zacht);
+}
+
+.naamknop.gekozen {
+  background: var(--accent);
+  color: #fff;
+}
+
+.naamknop small {
+  color: var(--inkt-zacht);
+  font-size: 0.72rem;
+  margin-left: auto;
+}
+
+.naamknop.gekozen small {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ---------- Publiceren ---------- */
+
+.publiceer-rol {
+  overflow-y: auto;
+  padding: 24px 16px 60px;
+}
+
+.publiceer-binnen {
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.publiceer-binnen h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.uitleg {
+  color: var(--inkt-zacht);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.kaart {
+  background: var(--kaart);
+  border: 1px solid var(--lijn);
+  border-radius: var(--radius-groot);
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+
+.kaart h3 {
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+}
+
+.kaart .knop {
+  margin-top: 6px;
+}
+
+.kaart-gevaar {
+  border-color: var(--fout-zacht);
+}
+
+.kaart input[type="file"] {
+  font-size: 0.82rem;
+  padding: 8px;
+  background: var(--papier);
+}
+
+code {
+  background: var(--papier-diep);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.86em;
+}
+
+.controle {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.88rem;
+}
+
+.controle li {
+  padding: 6px 0 6px 24px;
+  position: relative;
+  line-height: 1.45;
+  border-top: 1px solid var(--lijn);
+}
+
+.controle li:first-child {
+  border-top: 0;
+}
+
+.controle li::before {
+  position: absolute;
+  left: 0;
+  top: 6px;
+}
+
+.controle li.ok::before {
+  content: "✓";
+  color: var(--goed);
+}
+.controle li.let-op::before {
+  content: "!";
+  color: #b5843a;
+  font-weight: 700;
+}
+.controle li.mis::before {
+  content: "✕";
+  color: var(--fout);
+}
+
+.melding {
+  font-size: 0.86rem;
+  margin: 10px 0 0;
+  min-height: 20px;
+  line-height: 1.5;
+}
+
+.melding.gelukt {
+  color: var(--goed);
+}
+.melding.mis {
+  color: var(--fout);
+}
+.melding.bezig {
+  color: var(--inkt-zacht);
+}
+
+/* ---------- Dialoog ---------- */
+
+.dialoog-breed {
+  max-width: 540px;
+  text-align: left;
+}
+
+.dialoog-breed p {
+  text-align: left;
+}
+
+.dialoog-kaart textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+/* ---------- De boom in bewerkstand ---------- */
+
+.boom[data-modus="bewerken"] .knoop.gekozen {
+  border-color: var(--accent);
+  border-width: 2.5px;
+  box-shadow: 0 0 0 4px var(--accent-zacht), var(--schaduw);
+}
+
+.boom[data-modus="bewerken"] .knoop.heeft-foto .knoop-naam::after {
+  content: " ●";
+  color: var(--olijf);
+  font-size: 0.7em;
+  vertical-align: middle;
+}
+
+/* ---------- Smal scherm: zijpaneel eronder ---------- */
+
+@media (max-width: 860px) {
+  .werkvlak {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+  }
+  .zijpaneel {
+    border-left: 0;
+    border-top: 1px solid var(--lijn);
+    max-height: 46dvh;
+  }
+  .foto-doek img {
+    max-height: calc(50dvh - 60px);
+  }
+}

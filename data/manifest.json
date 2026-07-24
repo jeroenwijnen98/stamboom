@@ -1,0 +1,26 @@
+{
+  "versie": 1,
+  "kdf": {
+    "zout": "cN3pdqkpcegHFugn9YSeQw==",
+    "iteraties": 250000
+  },
+  "controle": "UchJuRqrP+azhn5jmTtieh2l/DAlrHHCOeWLcT1HdlT9n9qaZ6OOJ5Stmg==",
+  "fotos": [
+    "f1",
+    "f10",
+    "f11",
+    "f12",
+    "f13",
+    "f14",
+    "f16",
+    "f17",
+    "f2",
+    "f3",
+    "f4",
+    "f5",
+    "f7",
+    "f8",
+    "f9"
+  ],
+  "gemaakt": "2026-07-24"
+}

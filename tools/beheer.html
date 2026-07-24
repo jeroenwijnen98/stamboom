@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Stamboom — beheer</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/beheer.css" />
+  </head>
+  <body class="beheer">
+    <header class="beheer-kop">
+      <h1>Stamboom — beheer</h1>
+      <nav class="tabs" role="tablist">
+        <button class="tab actief" role="tab" data-tab="stamboom">Stamboom</button>
+        <button class="tab" role="tab" data-tab="gezichten">Gezichten</button>
+        <button class="tab" role="tab" data-tab="publiceren">Publiceren</button>
+      </nav>
+      <span class="beheer-status" id="status"></span>
+    </header>
+
+    <!-- ================= TAB 1: STAMBOOM ================= -->
+    <section class="paneel actief" id="tab-stamboom">
+      <div class="werkbalk">
+        <button class="knop knop-klein" id="knop-nieuw">+ Persoon</button>
+        <button class="knop knop-klein knop-stil" id="knop-snel">Snel invoeren…</button>
+        <button class="knop knop-klein knop-stil" id="knop-passend">⤢ Passend</button>
+        <span class="werkbalk-info" id="boom-info"></span>
+      </div>
+
+      <div class="werkvlak">
+        <div class="werkvlak-boom" id="editor-boom"></div>
+
+        <aside class="zijpaneel" id="persoon-paneel">
+          <p class="zijpaneel-leeg" id="persoon-leeg">
+            Tik een persoon aan in de stamboom, of maak er een met
+            <strong>+ Persoon</strong>.
+          </p>
+
+          <div id="persoon-formulier" hidden>
+            <label>Volledige naam
+              <input type="text" id="veld-naam" autocomplete="off" />
+            </label>
+            <label>Roepnaam <span class="hint">wat er in de boom komt te staan</span>
+              <input type="text" id="veld-roepnaam" autocomplete="off" placeholder="bv. Opa Jan" />
+            </label>
+            <div class="veld-rij">
+              <label>Geboren
+                <input type="number" id="veld-geboren" inputmode="numeric" placeholder="1930" />
+              </label>
+              <label>Overleden
+                <input type="number" id="veld-overleden" inputmode="numeric" placeholder="—" />
+              </label>
+            </div>
+
+            <h3>Familie</h3>
+            <div class="knoppenrij">
+              <button class="knop knop-klein knop-stil" id="knop-partner">+ Partner</button>
+              <button class="knop knop-klein knop-stil" id="knop-kind">+ Kind</button>
+              <button class="knop knop-klein knop-stil" id="knop-ouder">+ Ouder</button>
+            </div>
+
+            <!-- Kiezer: nieuw persoon, of iemand die al in de boom staat -->
+            <div class="koppel" id="koppel-paneel" hidden>
+              <p class="koppel-kop" id="koppel-kop"></p>
+              <button class="knop knop-klein" id="koppel-nieuw">＋ Nieuwe persoon</button>
+              <input type="search" id="koppel-zoek" autocomplete="off"
+                     placeholder="…of zoek iemand die er al staat" />
+              <div class="naamlijst" id="koppel-lijst"></div>
+              <p class="melding" id="koppel-melding"></p>
+              <button class="knop knop-klein knop-stil" id="koppel-annuleer">Annuleren</button>
+            </div>
+
+            <div class="relatielijst" id="relaties"></div>
+
+            <h3>Volgorde tussen broers en zussen</h3>
+            <div class="knoppenrij">
+              <button class="knop knop-klein knop-stil" id="knop-links">◀ Naar links</button>
+              <button class="knop knop-klein knop-stil" id="knop-rechts">Naar rechts ▶</button>
+            </div>
+
+            <label class="vinkje" id="hoofdtak-regel" hidden>
+              <input type="checkbox" id="veld-hoofdtak" />
+              <span>Hang het gezin via deze persoon in de boom
+                <span class="hint">alleen nodig als beide partners ouders in de stamboom hebben</span>
+              </span>
+            </label>
+
+            <button class="knop knop-klein knop-gevaar" id="knop-verwijder">
+              Persoon verwijderen
+            </button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: GEZICHTEN ================= -->
+    <section class="paneel" id="tab-gezichten">
+      <div class="werkbalk">
+        <label class="knop knop-klein" for="veld-fotos">+ Foto's toevoegen</label>
+        <input type="file" id="veld-fotos" accept="image/*" multiple hidden />
+        <button class="knop knop-klein knop-stil" id="knop-foto-weg" disabled>
+          Foto verwijderen
+        </button>
+        <span class="werkbalk-info" id="foto-info"></span>
+      </div>
+
+      <div class="fotostrook" id="fotostrook"></div>
+
+      <div class="werkvlak">
+        <div class="werkvlak-foto" id="foto-werkvlak">
+          <p class="werkvlak-leeg" id="foto-leeg">
+            Sleep foto's hierheen, of gebruik <strong>+ Foto's toevoegen</strong>.<br />
+            Teken daarna vanaf het midden van een gezicht naar buiten om het te omcirkelen.
+          </p>
+          <div class="foto-doek" id="foto-doek" hidden>
+            <img id="foto-afbeelding" alt="" draggable="false" />
+            <div class="cirkels" id="cirkels"></div>
+          </div>
+        </div>
+
+        <aside class="zijpaneel" id="gezicht-paneel">
+          <div id="foto-gegevens" hidden>
+            <h3>Deze foto</h3>
+            <div class="veld-rij">
+              <label>Jaar
+                <input type="number" id="veld-jaar" inputmode="numeric" placeholder="1968" />
+              </label>
+            </div>
+            <label>Bijschrift
+              <input type="text" id="veld-bijschrift" placeholder="bv. Zomer in Zeeland" />
+            </label>
+          </div>
+
+          <div id="gezicht-gegevens" hidden>
+            <h3>Wie is dit?</h3>
+            <input type="search" id="veld-zoek" placeholder="Typ een naam…" autocomplete="off" />
+            <div class="naamlijst" id="naamlijst"></div>
+            <button class="knop knop-klein knop-gevaar" id="knop-gezicht-weg">
+              Cirkel verwijderen
+            </button>
+          </div>
+
+          <div id="ontbreekt-blok">
+            <h3>Nog zonder gezicht</h3>
+            <p class="hint" id="ontbreekt-lijst"></p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= TAB 3: PUBLICEREN ================= -->
+    <section class="paneel" id="tab-publiceren">
+      <div class="publiceer-rol">
+        <div class="publiceer-binnen">
+          <h2>Publiceren</h2>
+          <p class="uitleg">
+            Alles wordt versleuteld met de familiecode en in één ZIP-bestand gezet.
+            Pak dat uit over de map <code>data/</code> in de repo, commit en push.
+            Wie de code niet heeft, ziet niets — ook de foto's niet.
+          </p>
+
+          <div class="kaart">
+            <h3>Controle vooraf</h3>
+            <ul class="controle" id="controle"></ul>
+          </div>
+
+          <div class="kaart">
+            <h3>Familiecode</h3>
+            <p class="hint">
+              Kies drie willekeurige woorden met streepjes ertussen, bijvoorbeeld
+              <code>schuur-appel-fiets</code>. Deze code kun je niet terugvinden als
+              je hem kwijtraakt — schrijf hem ergens op.
+            </p>
+            <label>Code
+              <input type="password" id="veld-code" autocomplete="new-password" />
+            </label>
+            <label>Nog een keer
+              <input type="password" id="veld-code2" autocomplete="new-password" />
+            </label>
+            <button class="knop" id="knop-publiceer">Maak data.zip</button>
+            <p class="melding" id="publiceer-melding"></p>
+          </div>
+
+          <div class="kaart">
+            <h3>Bestaande gegevens inlezen</h3>
+            <p class="hint">
+              Kies de map <code>data/</code> uit de repo en voer de familiecode in.
+              Alles wordt ontsleuteld en komt hier weer in de beheer-tool te staan —
+              zo is de gepubliceerde map tegelijk je back-up.
+              <strong>Let op:</strong> dit vervangt wat er nu in de beheer-tool staat.
+            </p>
+            <label>Map <code>data/</code>
+              <input type="file" id="veld-map" webkitdirectory directory multiple />
+            </label>
+            <label>Code
+              <input type="password" id="veld-code-in" autocomplete="off" />
+            </label>
+            <button class="knop knop-stil" id="knop-inlezen">Inlezen</button>
+            <p class="melding" id="inlees-melding"></p>
+          </div>
+
+          <div class="kaart kaart-gevaar">
+            <h3>Opnieuw beginnen</h3>
+            <p class="hint">
+              Wist alles in de beheer-tool. De gepubliceerde <code>data/</code>-map
+              blijft staan.
+            </p>
+            <button class="knop knop-klein knop-gevaar" id="knop-wis">Alles wissen</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Dialoog: snel invoeren ================= -->
+    <div class="dialoog" id="dialoog-snel">
+      <div class="dialoog-kaart dialoog-breed">
+        <h3>Snel invoeren</h3>
+        <p>
+          Eén persoon per regel. Springt een regel verder in, dan is het een kind
+          van de regel erboven. Partners scheid je met <code>x</code>.
+        </p>
+        <textarea id="snel-tekst" rows="9" spellcheck="false" placeholder="Jan Wijnen (1930-2010) x Marie de Vries (1932-2015)
+  Piet Wijnen (1955) x Ria Jansen (1957)
+    Marc Wijnen (1985)
+    Anne Wijnen (1988)
+  Corrie Wijnen (1958)"></textarea>
+        <p class="hint">
+          Jaartallen tussen haakjes: <code>(1930)</code> of <code>(1930-2010)</code>.
+          Een roepnaam zet je tussen aanhalingstekens:
+          <code>Jan Wijnen "Opa Jan" (1930)</code>.
+        </p>
+        <p class="melding" id="snel-melding"></p>
+        <div class="dialoog-knoppen">
+          <button class="knop knop-stil" id="snel-annuleer">Annuleren</button>
+          <button class="knop" id="snel-voegtoe">Toevoegen</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/crypto.js"></script>
+    <script src="../js/stamboom-layout.js"></script>
+    <script src="../js/gezicht.js"></script>
+    <script src="../js/boom-view.js"></script>
+    <script src="zip.js"></script>
+    <script src="opslag.js"></script>
+    <script src="beheer.js"></script>
+  </body>
+</html>
