@@ -198,10 +198,12 @@
       const o = persoon(oid);
       if (o) rij("ouder", o, () => haalRelatieWeg("ouder", p.id, oid));
     }
-    for (const pid of p.partners || []) {
+    (p.partners || []).forEach((pid, i) => {
       const q = persoon(pid);
-      if (q) rij("partner", q, () => haalRelatieWeg("partner", p.id, pid));
-    }
+      // De eerste partner is "partner"; latere partners (hertrouwd) krijgen een
+      // eigen label en komen in de boom aan de andere kant te staan.
+      if (q) rij(i === 0 ? "partner" : "2e partner", q, () => haalRelatieWeg("partner", p.id, pid));
+    });
     for (const k of personen.filter((k) => (k.ouders || []).includes(p.id))) {
       rij("kind", k, () => haalRelatieWeg("kind", p.id, k.id));
     }
@@ -262,9 +264,18 @@
     const p = persoon(gekozenPersoonId);
     if (!p) return;
     koppelSoort = soort;
-    $("koppel-kop").textContent = KOPPEL_KOP[soort](toonNaam(p));
+    // Heeft deze persoon al een partner, dan wordt dit een tweede partner
+    // (hertrouwd): in de boom komt die aan de andere kant, met een eigen lijn.
+    const tweede = soort === "partner" && (p.partners || []).length > 0;
+    $("koppel-kop").textContent = tweede
+      ? `Wie wordt de tweede partner van ${toonNaam(p)}?`
+      : KOPPEL_KOP[soort](toonNaam(p));
+    melding(
+      "koppel-melding",
+      tweede ? "Komt in de boom aan de andere kant te staan, met een eigen lijn." : "",
+      tweede ? "" : ""
+    );
     $("koppel-zoek").value = "";
-    melding("koppel-melding", "", "");
     $("koppel-paneel").hidden = false;
     tekenKoppelLijst();
     $("koppel-zoek").focus();

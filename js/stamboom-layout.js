@@ -135,6 +135,32 @@ const StamboomLayout = (() => {
     return 0;
   }
 
+  /**
+   * Zet de leden van één blok op volgorde van links naar rechts.
+   *
+   * Is iemand hertrouwd (een "spil" met twee of meer partners in dezelfde
+   * groep), dan zet die persoon in het MIDDEN, met een partner aan elke kant —
+   * eerste huwelijk links, later huwelijk rechts, in de volgorde waarin de
+   * partners bij de spil genoteerd staan. Een gewoon echtpaar houdt de gewone,
+   * stabiele sorteervolgorde.
+   */
+  function ordenLeden(leden, idx, gen) {
+    if (leden.length <= 1) return leden;
+    const inGroep = new Set(leden.map((l) => l.id));
+    const graad = (l) => idx.partnersVan(l.id).filter((id) => inGroep.has(id)).length;
+    const spil = leden.find((l) => graad(l) >= 2);
+    if (spil) {
+      const partners = (spil.partners || [])
+        .filter((id) => inGroep.has(id))
+        .map((id) => idx.perId.get(id));
+      const half = Math.floor(partners.length / 2);
+      return [...partners.slice(0, half), spil, ...partners.slice(half)];
+    }
+    return [...leden].sort((a, b) =>
+      vergelijk(sorteerSleutel(a, gen), sorteerSleutel(b, gen))
+    );
+  }
+
   function maakBlokken(idx, gen) {
     const oplopend = [...idx.personen].sort((a, b) =>
       vergelijk(sorteerSleutel(a, gen), sorteerSleutel(b, gen))
@@ -145,12 +171,21 @@ const StamboomLayout = (() => {
 
     for (const p of oplopend) {
       if (blokVan.has(p.id)) continue;
-      const leden = [p];
-      for (const pid of idx.partnersVan(p.id)) {
-        if (blokVan.has(pid)) continue;
-        leden.push(idx.perId.get(pid));
-        blokVan.set(pid, true); // voorlopig reserveren
+      // Hele partnergroep verzamelen (kringloop via partners), niet alleen de
+      // directe partners van de seed — anders valt een hertrouwde spil in
+      // stukjes uiteen als de eerste partner vóór de spil gesorteerd staat.
+      const groep = new Set([p.id]);
+      const nogTeDoen = [p.id];
+      while (nogTeDoen.length) {
+        const cur = nogTeDoen.pop();
+        for (const pid of idx.partnersVan(cur)) {
+          if (!blokVan.has(pid) && !groep.has(pid)) {
+            groep.add(pid);
+            nogTeDoen.push(pid);
+          }
+        }
       }
+      const leden = ordenLeden([...groep].map((id) => idx.perId.get(id)), idx, gen);
       const blok = {
         id: "blok" + blokken.length,
         leden,
@@ -374,7 +409,7 @@ const StamboomLayout = (() => {
     const lijn = (x1, y1, x2, y2, soort) =>
       lijnen.push({ x1, y1, x2, y2, soort });
 
-    // Het punt onder een (echt)paar waar de lijn naar de kinderen begint.
+    // Het punt onder een heel blok (vangnet als de ouders niet te bepalen zijn).
     function vertrekpunt(blok) {
       const eerste = knoopVan.get(blok.leden[0].id);
       const laatste = knoopVan.get(blok.leden[blok.leden.length - 1].id);
@@ -387,8 +422,21 @@ const StamboomLayout = (() => {
       };
     }
 
-    function naarKind(blok, kindKnoop, soort) {
-      const van = vertrekpunt(blok);
+    // Het punt onder het júíste ouderpaar. Bij een hertrouwde spil hangen de
+    // kinderen van het eerste huwelijk zo onder het linkerpaar en die van het
+    // tweede onder het rechterpaar, in plaats van allemaal onder het midden.
+    function ouderpunt(blok, kindPersoon) {
+      const ouders = new Set(kindPersoon.ouders || []);
+      const knopenHier = blok.leden
+        .filter((l) => ouders.has(l.id))
+        .map((l) => knoopVan.get(l.id));
+      if (!knopenHier.length) return vertrekpunt(blok);
+      const links = Math.min(...knopenHier.map((k) => k.x));
+      const rechts = Math.max(...knopenHier.map((k) => k.x + k.breedte));
+      return { x: (links + rechts) / 2, y: knopenHier[0].y + knopenHier[0].hoogte };
+    }
+
+    function naarKindVanuit(van, kindKnoop, soort) {
       const busY = van.y + o.ruimteVerticaal / 2;
       const naarX = kindKnoop.x + kindKnoop.breedte / 2;
       lijn(van.x, van.y, van.x, busY, soort);
@@ -397,14 +445,22 @@ const StamboomLayout = (() => {
     }
 
     for (const blok of blokken) {
-      // Streepje tussen partners.
+      // Streepje tussen partners. Een later huwelijk (de partner staat op een
+      // tweede of latere plek bij de spil) krijgt een eigen stijl.
       for (let i = 1; i < blok.leden.length; i++) {
-        const a = knoopVan.get(blok.leden[i - 1].id);
-        const b = knoopVan.get(blok.leden[i].id);
-        lijn(a.x + a.breedte, a.y + a.hoogte / 2, b.x, b.y + b.hoogte / 2, "partner");
+        const A = blok.leden[i - 1];
+        const B = blok.leden[i];
+        const a = knoopVan.get(A.id);
+        const b = knoopVan.get(B.id);
+        const later =
+          (A.partners || []).indexOf(B.id) >= 1 ||
+          (B.partners || []).indexOf(A.id) >= 1;
+        lijn(a.x + a.breedte, a.y + a.hoogte / 2, b.x, b.y + b.hoogte / 2,
+          later ? "partner-later" : "partner");
       }
       for (const kind of blok.kinderen) {
-        naarKind(blok, knoopVan.get((kind.aanhechtLid || kind.leden[0]).id), "gezin");
+        const kindPersoon = kind.aanhechtLid || kind.leden[0];
+        naarKindVanuit(ouderpunt(blok, kindPersoon), knoopVan.get(kindPersoon.id), "gezin");
       }
     }
 
@@ -412,7 +468,7 @@ const StamboomLayout = (() => {
     // gestippeld, zodat zichtbaar is dat deze lijn een eind reist.
     for (const band of losseOuderbanden) {
       const doel = knoopVan.get(band.kind.id);
-      if (doel) naarKind(band.ouderBlok, doel, "gezin-los");
+      if (doel) naarKindVanuit(vertrekpunt(band.ouderBlok), doel, "gezin-los");
     }
 
     return lijnen;

@@ -86,6 +86,20 @@ rechtsboven terugleest:
 > persoon in de boom"** maak je die keuze zelf. De andere ouder-kindrelatie
 > gaat niet verloren: die wordt als stippellijn getekend.
 
+### Tweede partner (hertrouwd)
+
+Had iemand al een partner en klik je **+ Partner** opnieuw, dan wordt dat een
+**tweede partner**. In de boom komt die persoon dan aan de *andere* kant te
+staan: de hertrouwde persoon staat in het midden, de eerste partner links en de
+latere rechts. De lijn naar het tweede huwelijk is groen en onderbroken, zodat
+je in één oogopslag ziet welk huwelijk later kwam. Kinderen hangen onder het
+juiste paar — die van het eerste huwelijk links, die van het tweede rechts.
+
+De volgorde bepaalt wie "eerste" en wie "tweede" is: de partner die je het
+eerst koppelt is de eerste. In het paneel staat de latere als **2e partner**;
+klopt de volgorde niet, haal ze dan weg met de ✕ en koppel ze in de goede
+volgorde opnieuw.
+
 ### 2. Gezichten
 
 Tab **Gezichten**. Sleep je foto's erin (of gebruik de knop). Ze worden

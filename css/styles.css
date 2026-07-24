@@ -457,6 +457,13 @@ h3 {
   stroke: var(--accent);
   stroke-width: 2.5;
 }
+/* Een later huwelijk: andere kleur én onderbroken, zodat het duidelijk van het
+   eerste huwelijk verschilt. */
+.lijn-partner-later {
+  stroke: var(--olijf);
+  stroke-width: 2.5;
+  stroke-dasharray: 6 4;
+}
 .lijn-gezin-los {
   stroke-dasharray: 5 5;
   stroke: var(--inkt-zacht);
