@@ -1,5 +1,8 @@
 # Stamboomquiz
 
+**Live: <https://jeroenwijnen98.github.io/stamboom/>** — de QR-code staat in
+`qr-stamboom.png`. De familiecode deel je apart; die staat nergens in deze repo.
+
 Een webapp waarin familieleden gezichten uit oude foto's bij de juiste persoon
 in de stamboom zetten. Je vult eerst **alles** in en ziet **pas daarna** hoeveel
 je er goed had, met een overzicht van je fouten.
