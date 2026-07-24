@@ -6,6 +6,10 @@
   "use strict";
   const $ = (id) => document.getElementById(id);
 
+  // Mag deze bezoeker al vóór de quiz rondkijken? Aan als de code op het
+  // ingestelde achtervoegsel eindigde (bv. "-jw"). Zie CONFIG.technisch.
+  let magVrijBladeren = false;
+
   /* ---------- Teksten uit config.js in de pagina zetten ---------- */
 
   function zetTeksten() {
@@ -27,8 +31,15 @@
 
   async function probeerCode(e) {
     e.preventDefault();
-    const code = $("slot-code").value;
-    if (!code) return;
+    const ingevoerd = $("slot-code").value;
+    if (!ingevoerd) return;
+
+    // Eindigt de code op het achtervoegsel, dan halen we dat eraf (de echte
+    // code blijft over) en onthouden we dat rondkijken meteen mag.
+    const achter = CONFIG.technisch.vrijBladerenAchtervoegsel || "";
+    const vrij =
+      !!achter && ingevoerd.trim().toLowerCase().endsWith(achter.toLowerCase());
+    const code = vrij ? ingevoerd.trim().slice(0, -achter.length) : ingevoerd;
 
     $("slot-knop").disabled = true;
     $("slot-melding").textContent = CONFIG.slot.bezig;
@@ -45,10 +56,15 @@
         $("slot-code").select();
         return;
       }
+      magVrijBladeren = vrij;
       try {
         sessionStorage.setItem(
           CONFIG.technisch.sessieSleutel,
           await Data.sleutelTekst()
+        );
+        sessionStorage.setItem(
+          CONFIG.technisch.vrijBladerenSleutel,
+          vrij ? "1" : "0"
         );
       } catch {
         /* privémodus: dan vraagt hij het na verversen opnieuw */
@@ -71,6 +87,12 @@
     }
     if (!bewaard) return false;
     if (!(await Data.openMetSleutel(bewaard))) return false;
+    try {
+      magVrijBladeren =
+        sessionStorage.getItem(CONFIG.technisch.vrijBladerenSleutel) === "1";
+    } catch {
+      /* geen sessionStorage: dan gewoon niet vrij bladeren */
+    }
     naBinnenkomst();
     return true;
   }
@@ -78,6 +100,8 @@
   function naBinnenkomst() {
     $("slot-code").value = "";
     $("slot-melding").textContent = "";
+    // Rondkijken staat aan het begin alleen open voor de -jw-code.
+    $("kies-bladeren").hidden = !magVrijBladeren;
     App.maakBoom();
     // Een halfafgemaakt potje pakken we op waar het gebleven was.
     if (!Quiz.herstel()) App.toonScherm("keuze");

@@ -166,6 +166,21 @@ hoef je de code niet opnieuw te typen; sluit je het tabblad, dan wel.
 
 ---
 
+## Rondkijken pas na de quiz
+
+**Rondkijken** (de stamboom mét alle foto's — het antwoordblad) staat voor
+gewone bezoekers niet meteen open: aan het begin zien ze alleen **Quiz spelen**.
+Pas ná het nakijken kunnen ze via het uitslagscherm alsnog rondkijken. Zo begint
+iedereen met spelen in plaats van vals te spelen.
+
+Wil je zelf wél meteen kunnen rondkijken, vul de code dan in met **`-jw`**
+erachter — dus `familie-duvekot-jw`. Dat achtervoegsel wordt eraf gehaald vóór de
+code wordt gecontroleerd, en zet de rondkijk-knop meteen aan het begin aan. Het
+achtervoegsel staat in `js/config.js` (`vrijBladerenAchtervoegsel`); leeg maken
+zet deze extra toegang uit.
+
+---
+
 ## Op GitHub Pages zetten
 
 1. Repo aanmaken en pushen.
