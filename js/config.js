@@ -125,13 +125,5 @@ const CONFIG = {
 
     // Sleutel waaronder de afgeleide sleutel in sessionStorage staat.
     sessieSleutel: "stamboomquiz-sleutel",
-
-    // "Rondkijken" (het antwoordblad) staat normaal pas ná de quiz open.
-    // Wie de familiecode invult met dit achtervoegsel erachter — bijvoorbeeld
-    // "familie-duvekot-jw" — krijgt het al aan het begin te zien. Het
-    // achtervoegsel wordt eraf gehaald vóór de code wordt gecontroleerd, dus de
-    // gewone code blijft gewoon werken. Leeg maken zet deze extra toegang uit.
-    vrijBladerenAchtervoegsel: "-jw",
-    vrijBladerenSleutel: "stamboomquiz-vrij-bladeren",
   },
 };
